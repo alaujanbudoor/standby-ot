@@ -37,7 +37,7 @@
 </main>
 <script>
 // The page itself holds no secret: the key travels in the link's #fragment, which browsers never send to the server.
-var EXEC='https://script.google.com/macros/s/AKfycbyMxMHnGWKGTUwChZk4vYwAepoYUxDcS6lKxz634iWfHDsSyat5gNvYVLYbV3r-KNRS_w/exec';
+var EXEC='https://script.google.com/macros/s/AKfycbz4qH7jKF73xLTLPSRmB5nRXOPubNoBr3z-96MBvRtYNHdJis3nuL4Wnl5nwoIdBi3B0A/exec';
 var m=location.hash.match(/k=([A-Za-z0-9_-]+)/),key=m?m[1]:null;
 try{if(key)localStorage.setItem('sbotKey',key);else key=localStorage.getItem('sbotKey')}catch(e){}
 if(!key){document.getElementById('nokey').hidden=false;document.getElementById('open').hidden=true;document.getElementById('howto').hidden=true}
