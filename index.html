@@ -44,8 +44,12 @@ if(!key){document.getElementById('nokey').hidden=false;document.getElementById('
 else{
   var target=EXEC+'?k='+encodeURIComponent(key);
   document.getElementById('open').href=target;
-  // opened from the home screen icon: go straight in
-  if(navigator.standalone||matchMedia('(display-mode: standalone)').matches)location.replace(target);
+  // opened from the home screen icon: show only a short "Opening" and go straight in
+  if(navigator.standalone||matchMedia('(display-mode: standalone)').matches){
+    document.getElementById('open').hidden=true;document.getElementById('howto').hidden=true;
+    document.querySelector('h1').textContent='Opening…';
+    location.replace(target);
+  }
 }
 </script>
 </body>
