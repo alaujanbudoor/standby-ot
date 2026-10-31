@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Standby &amp; OT</title>
+<meta name="apple-mobile-web-app-title" content="Standby &amp; OT">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="robots" content="noindex">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="favicon.png">
+<style>
+  :root{--bg:#f3f6f8;--ink:#13202a;--muted:#5b6c79;--sb:#1d6c86;--line:#dbe2e7}
+  @media (prefers-color-scheme:dark){:root{--bg:#0e1418;--ink:#e4ecf1;--muted:#93a4b0;--sb:#5db2d0;--line:#25323b}}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,system-ui,sans-serif;
+    padding:max(24px,env(safe-area-inset-top)) max(20px,env(safe-area-inset-right)) 24px max(20px,env(safe-area-inset-left))}
+  main{max-width:420px;margin:0 auto;display:flex;flex-direction:column;gap:18px;align-items:center;text-align:center}
+  img{width:96px;height:96px;border-radius:22px}
+  a.btn{display:block;width:100%;padding:14px;border-radius:12px;background:var(--sb);color:#fff;text-decoration:none;font-weight:600}
+  ol{text-align:left;color:var(--muted);margin:0;padding-left:20px}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+  <img src="apple-touch-icon.png" alt="">
+  <h1 style="margin:0">Standby &amp; OT</h1>
+  <a class="btn" id="open" href="#">Open the calculator</a>
+  <div id="howto">
+    <p style="margin:0 0 6px">To put it on your home screen with this icon:</p>
+    <ol>
+      <li>In Safari, tap <b>Share</b> (square with an arrow).</li>
+      <li>Tap <b>Add to Home Screen</b>, then <b>Add</b>.</li>
+    </ol>
+  </div>
+  <p id="nokey" hidden style="color:var(--muted)">This link is missing its key. Ask Budoor for the full link.</p>
+</main>
+<script>
+// The page itself holds no secret: the key travels in the link's #fragment, which browsers never send to the server.
+var EXEC='https://script.google.com/macros/s/AKfycbyMxMHnGWKGTUwChZk4vYwAepoYUxDcS6lKxz634iWfHDsSyat5gNvYVLYbV3r-KNRS_w/exec';
+var m=location.hash.match(/k=([A-Za-z0-9_-]+)/),key=m?m[1]:null;
+try{if(key)localStorage.setItem('sbotKey',key);else key=localStorage.getItem('sbotKey')}catch(e){}
+if(!key){document.getElementById('nokey').hidden=false;document.getElementById('open').hidden=true;document.getElementById('howto').hidden=true}
+else{
+  var target=EXEC+'?k='+encodeURIComponent(key);
+  document.getElementById('open').href=target;
+  // opened from the home screen icon: go straight in
+  if(navigator.standalone||matchMedia('(display-mode: standalone)').matches)location.replace(target);
+}
+</script>
+</body>
+</html>
