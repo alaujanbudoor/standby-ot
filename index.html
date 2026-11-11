@@ -42,10 +42,22 @@ var m=location.hash.match(/k=([A-Za-z0-9_-]+)/),key=m?m[1]:null;
 try{if(key)localStorage.setItem('sbotKey',key);else key=localStorage.getItem('sbotKey')}catch(e){}
 if(!key){document.getElementById('nokey').hidden=false;document.getElementById('open').hidden=true;document.getElementById('howto').hidden=true}
 else{
-  var target=EXEC+'?k='+encodeURIComponent(key);
+  // the MRN key: made on this phone the first time the home-screen icon opens, or brought in by a link (#…&e=…).
+  // It goes to the calculator in the #part too, so neither GitHub nor Google ever receives it.
+  var standalone=navigator.standalone||matchMedia('(display-mode: standalone)').matches;
+  var em=location.hash.match(/[#&]e=([A-Za-z0-9_-]{43})(?:&|$)/),ek=em?em[1]:null;
+  try{
+    if(ek)localStorage.setItem('sbotE',ek);else ek=localStorage.getItem('sbotE');
+    if(!ek&&standalone&&window.crypto&&crypto.getRandomValues){
+      var r=crypto.getRandomValues(new Uint8Array(32)),s='';for(var i=0;i<r.length;i++)s+=String.fromCharCode(r[i]);
+      localStorage.setItem('sbotE',btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''));
+      ek=localStorage.getItem('sbotE'); // only a key that was really kept is used
+    }
+  }catch(e){ek=null}
+  var target=EXEC+'?k='+encodeURIComponent(key)+(ek?'#e='+ek:'');
   document.getElementById('open').href=target;
   // opened from the home screen icon: show only a short "Opening" and go straight in
-  if(navigator.standalone||matchMedia('(display-mode: standalone)').matches){
+  if(standalone){
     document.getElementById('open').hidden=true;document.getElementById('howto').hidden=true;
     document.querySelector('h1').textContent='Opening…';
     location.replace(target);
